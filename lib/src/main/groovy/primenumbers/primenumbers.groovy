@@ -3,6 +3,38 @@
  */
 package primenumbers
 
+class InvalidRangeException extends Exception {}
+
+class Globals {
+    def static PRIMES_TO_TEN = [2, 3, 5, 7]
+}
+
+
 static int[] calculatePrimes(int start, int stop) {
-    return null
+    if (start < 0 || stop < 0 || (stop < start)) {
+        throw new InvalidRangeException()
+    }
+
+    def primes = []
+    for (number in start..<stop) {
+        if (number in Globals.PRIMES_TO_TEN) {
+            primes.add(number)
+        }
+        else if (number == 1) {
+            continue
+        }
+
+        def isPrime = true
+        for (divisor in Globals.PRIMES_TO_TEN) {
+            if (number % divisor == 0) {
+                isPrime = false
+                break
+            }
+        }
+
+        if (isPrime) {
+            primes.add(number)
+        }
+    }
+    return primes
 }

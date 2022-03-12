@@ -6,7 +6,7 @@ package primenumbers
 import spock.lang.Specification
 
 class PrimeNumbersTest extends Specification {
-    def "Calculate prime numbers between 1 and 10"() {
+    def "calculate prime numbers between 1 and 10"() {
         setup:
         def primeNumberCalculator = new primenumbers()
 
@@ -14,6 +14,31 @@ class PrimeNumbersTest extends Specification {
         def result = primeNumberCalculator.calculatePrimes(0, 10)
 
         then:
-        result == null
+        result == [2,3,5,7]
+    }
+}
+
+class PrimeNumbersTestDataDriven extends Specification {
+    def "calculate prime numbers between start and stop"(int start, int stop) {
+        expect:
+        result == new primenumbers().calculatePrimes(start, stop)
+
+        where:
+        start | stop || result
+        0     | 10   || [2,3,5,7]
+        0     | 100  || [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+    }
+
+    def "calculate prime numbers with illegal inputs"(int start, int stop) {
+        when:
+        new primenumbers().calculatePrimes(start, stop)
+
+        then:
+        thrown result
+
+        where:
+        start | stop || result
+        10    | 0    || InvalidRangeException
+        -5    | 0    || InvalidRangeException
     }
 }
